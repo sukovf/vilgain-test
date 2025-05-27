@@ -4,3 +4,9 @@ controllers:
         namespace: App\Controller
     type: attribute
     prefix: /api
+
+api_login_check:
+    path: /api/auth/login
+    methods:
+        - OPTION
+        - POST
