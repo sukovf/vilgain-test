@@ -39,4 +39,15 @@ class UserController extends AbstractFOSRestController
     {
         return new Response($this->userFacade->getOne($id));
     }
+
+    #[IsGranted(UserRole::ADMIN->value)]
+    #[Post('/users')]
+    public function createUser(Request $request): Response
+    {
+        $newUserId = $this->userFacade->create($request);
+
+        return new Response([
+            'newUserId' => $newUserId
+        ], SymfonyResponse::HTTP_CREATED);
+    }
 }
