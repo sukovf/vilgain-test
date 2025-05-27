@@ -5,10 +5,14 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
+        users_in_db:
+            entity:
+                class: App\Entity\User
     firewalls:
         login:
             pattern: ^/api/auth/login
             stateless: true
+            provider: users_in_db
             json_login:
                 check_path: /api/auth/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
@@ -19,6 +23,7 @@ security:
         api:
             pattern: ^/api
             stateless: true
+            provider: users_in_db
             jwt: ~
 
     # Easy way to control access for large sections of your site
