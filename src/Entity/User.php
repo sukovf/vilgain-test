@@ -10,13 +10,14 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use JsonSerializable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[Entity(UserRepository::class)]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSerializable
 {
     #[Id]
     #[GeneratedValue]
@@ -111,5 +112,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
          */
         /** @phpstan-ignore-next-line */
         return $this->email;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'id'        => $this->id,
+            'email'     => $this->email,
+            'name'      => $this->name,
+            'role'      => $this->role->value
+        ];
     }
 }
