@@ -10,3 +10,4 @@
 /phpunit.xml
 /.phpunit.cache/
 phpstan.neon
+/config/jwt/*.pem
