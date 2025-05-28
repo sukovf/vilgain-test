@@ -4,13 +4,15 @@ namespace App\Service\User;
 
 use App\Entity\User;
 use App\Service\User\Creator\Creator;
+use App\Service\User\Updater\Updater;
 use Symfony\Component\HttpFoundation\Request;
 
 class Facade
 {
     public function __construct(
         private readonly Creator $creator,
-        private readonly Getter  $getter
+        private readonly Getter  $getter,
+        private readonly Updater $updater
     ) {}
 
     public function create(Request $request): int
@@ -29,5 +31,10 @@ class Facade
     public function getOne(int $id): User
     {
         return $this->getter->getOne($id);
+    }
+
+    public function update(int $id, Request $request): void
+    {
+        $this->updater->update($id, $request);
     }
 }

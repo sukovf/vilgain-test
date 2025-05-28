@@ -8,6 +8,7 @@ use App\Service\User\Facade;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\Controller\Annotations\Put;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -49,5 +50,14 @@ class UserController extends AbstractFOSRestController
         return new Response([
             'newUserId' => $newUserId
         ], SymfonyResponse::HTTP_CREATED);
+    }
+
+    #[IsGranted(UserRole::ADMIN->value)]
+    #[Put('/users/{id}')]
+    public function updateUser(int $id, Request $request): Response
+    {
+        $this->userFacade->update($id, $request);
+
+        return new Response();
     }
 }
