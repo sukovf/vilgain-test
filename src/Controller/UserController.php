@@ -6,6 +6,7 @@ use App\Api\Response;
 use App\Security\UserRole;
 use App\Service\User\Facade;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
@@ -57,6 +58,15 @@ class UserController extends AbstractFOSRestController
     public function updateUser(int $id, Request $request): Response
     {
         $this->userFacade->update($id, $request);
+
+        return new Response();
+    }
+
+    #[IsGranted(UserRole::ADMIN->value)]
+    #[Delete('/users/{id}')]
+    public function deleteUser(int $id): Response
+    {
+        $this->userFacade->delete($id);
 
         return new Response();
     }
