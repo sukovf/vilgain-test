@@ -14,10 +14,11 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class ArticleVoter extends Voter
 {
     public const CREATE = 'CREATE';
+    public const UPDATE = 'UPDATE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        if (!in_array($attribute, [self::CREATE])) {
+        if (!in_array($attribute, [self::CREATE, self::UPDATE])) {
             return false;
         }
 
@@ -41,6 +42,7 @@ class ArticleVoter extends Voter
 
         return match($attribute) {
             self::CREATE    => $this->canCreate($user),
+            self::UPDATE    => $this->canUpdate($user, $subject),
             default         => false
         };
     }
@@ -50,5 +52,12 @@ class ArticleVoter extends Voter
         return
             $user->getRole() === UserRole::ADMIN ||
             $user->getRole() === UserRole::AUTHOR;
+    }
+
+    private function canUpdate(User $user, Article $article): bool
+    {
+        return
+            $user->getRole() === UserRole::ADMIN ||
+            $article->getAuthor() === $user;
     }
 }
