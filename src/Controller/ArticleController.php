@@ -6,6 +6,7 @@ use App\Api\Response;
 use App\Service\Article\Facade;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations\Delete;
+use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,18 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 class ArticleController extends AbstractFOSRestController
 {
     public function __construct(private readonly Facade $articleFacade) {}
+
+    #[Get('/articles')]
+    public function getArticles(): Response
+    {
+        return new Response($this->articleFacade->getAll());
+    }
+
+    #[Get('/articles/{id}')]
+    public function getOneArticle(int $id): Response
+    {
+        return new Response($this->articleFacade->getOne($id));
+    }
 
     #[Post('/articles')]
     public function createArticle(Request $request): Response
