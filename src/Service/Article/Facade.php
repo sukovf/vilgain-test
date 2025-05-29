@@ -10,7 +10,8 @@ class Facade
 {
     public function __construct(
         private readonly Creator $creator,
-        private readonly Updater $updater
+        private readonly Updater $updater,
+        private readonly Deleter $deleter
     ) {}
 
     public function create(Request $request): int
@@ -21,5 +22,10 @@ class Facade
     public function update(int $id, Request $request): void
     {
         $this->updater->update($id, $request);
+    }
+
+    public function delete(int $id): void
+    {
+        $this->deleter->delete($id);
     }
 }

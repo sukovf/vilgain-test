@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Api\Response;
 use App\Service\Article\Facade;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations\Delete;
 use FOS\RestBundle\Controller\Annotations\Post;
 use FOS\RestBundle\Controller\Annotations\Put;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,6 +29,14 @@ class ArticleController extends AbstractFOSRestController
     public function updateArticle(int $id, Request $request): Response
     {
         $this->articleFacade->update($id, $request);
+
+        return new Response();
+    }
+
+    #[Delete('/articles/{id}')]
+    public function deleteArticle(int $id): Response
+    {
+        $this->articleFacade->delete($id);
 
         return new Response();
     }

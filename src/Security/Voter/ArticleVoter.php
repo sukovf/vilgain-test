@@ -15,10 +15,11 @@ class ArticleVoter extends Voter
 {
     public const CREATE = 'CREATE';
     public const UPDATE = 'UPDATE';
+    public const DELETE = 'DELETE';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
-        if (!in_array($attribute, [self::CREATE, self::UPDATE])) {
+        if (!in_array($attribute, [self::CREATE, self::UPDATE, self::DELETE])) {
             return false;
         }
 
@@ -43,6 +44,7 @@ class ArticleVoter extends Voter
         return match($attribute) {
             self::CREATE    => $this->canCreate($user),
             self::UPDATE    => $this->canUpdate($user, $subject),
+            self::DELETE    => $this->canDelete($user, $subject),
             default         => false
         };
     }
@@ -55,6 +57,13 @@ class ArticleVoter extends Voter
     }
 
     private function canUpdate(User $user, Article $article): bool
+    {
+        return
+            $user->getRole() === UserRole::ADMIN ||
+            $article->getAuthor() === $user;
+    }
+
+    private function canDelete(User $user, Article $article): bool
     {
         return
             $user->getRole() === UserRole::ADMIN ||
