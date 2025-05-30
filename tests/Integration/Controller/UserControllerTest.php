@@ -51,6 +51,7 @@ class UserControllerTest extends BaseWebTestCase
 
         $this->assertEquals(self::NEW_USER_NAME, $newUser->getName());
         $this->assertEquals(self::NEW_USER_ROLE, $newUser->getRole());
+        $this->assertEmpty($newUser->getArticles());
     }
 
     public function testGetAll(): void
@@ -96,6 +97,7 @@ class UserControllerTest extends BaseWebTestCase
 
         $this->assertEquals(self::NEW_USER_NAME, $newUser->getName());
         $this->assertEquals(self::NEW_USER_ROLE, $newUser->getRole());
+        $this->assertEmpty($newUser->getArticles());
     }
 
     public function testUpdate(): void
@@ -116,6 +118,7 @@ class UserControllerTest extends BaseWebTestCase
         $this->assertEquals(self::UPDATED_USER_EMAIL, $targetUser->getEmail());
         $this->assertEquals(self::UPDATED_USER_NAME, $targetUser->getName());
         $this->assertEquals(self::UPDATED_USER_ROLE, $targetUser->getRole());
+        $this->assertEmpty($targetUser->getArticles());
     }
 
     public function testDelete(): void
