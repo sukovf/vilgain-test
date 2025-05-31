@@ -21,7 +21,7 @@ class GetOne
                     'enum' => [Response::HTTP_OK]
                 ],
                 'message'   => [
-                    'enum' => ['']
+                    'type' => 'string'
                 ],
                 'data'      => [
                     'type'                  => 'object',

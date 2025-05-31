@@ -21,7 +21,7 @@ class GetAll
                     'enum' => [Response::HTTP_OK]
                 ],
                 'message'   => [
-                    'enum' => ['']
+                    'type' => 'string'
                 ],
                 'data'      => [
                     'type'      => 'array',
