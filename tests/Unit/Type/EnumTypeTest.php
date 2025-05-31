@@ -35,12 +35,12 @@ class EnumTypeTest extends TestCase
         $type = new DummyEnumType();
 
         $this->expectException(InvalidArgumentException::class);
-        $type->converttodatabasevalue(DummyPlainEnum::FOO, $this->platformMock);
+        $type->convertToDatabaseValue(DummyPlainEnum::FOO, $this->platformMock);
 
         $this->expectException(InvalidArgumentException::class);
-        $type->converttophpvalue([], $this->platformMock);
+        $type->convertToPHPValue([], $this->platformMock);
 
         $this->expectException(InvalidArgumentException::class);
-        $type->converttophpvalue('this is not in the enum', $this->platformMock);
+        $type->convertToPHPValue('this is not in the enum', $this->platformMock);
     }
 }
