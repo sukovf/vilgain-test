@@ -44,7 +44,7 @@ class ArticleController extends AbstractFOSRestController
     )]
     public function getArticles(): Response
     {
-        return new Response($this->articleFacade->getAll());
+        return new Response($this->articleFacade->getAll(), message: 'List of articles retrieved successfully');
     }
 
     #[Get('/articles/{id}')]
@@ -81,7 +81,7 @@ class ArticleController extends AbstractFOSRestController
     )]
     public function getOneArticle(int $id): Response
     {
-        return new Response($this->articleFacade->getOne($id));
+        return new Response($this->articleFacade->getOne($id), message: 'Article retrieved successfully');
     }
 
     #[Post('/articles')]
@@ -121,7 +121,7 @@ class ArticleController extends AbstractFOSRestController
 
         return new Response([
             'newArticleId' => $newArticleId
-        ], SymfonyResponse::HTTP_CREATED);
+        ], SymfonyResponse::HTTP_CREATED, 'Article created successfully');
     }
 
     #[Put('/articles/{id}')]
@@ -158,7 +158,7 @@ class ArticleController extends AbstractFOSRestController
     {
         $this->articleFacade->update($id, $request);
 
-        return new Response();
+        return new Response(message: 'Article updated successfully');
     }
 
     #[Delete('/articles/{id}')]
@@ -185,6 +185,6 @@ class ArticleController extends AbstractFOSRestController
     {
         $this->articleFacade->delete($id);
 
-        return new Response();
+        return new Response(message: 'Article deleted successfully');
     }
 }

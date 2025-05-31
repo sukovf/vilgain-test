@@ -83,7 +83,7 @@ class UserController extends AbstractFOSRestController
 
         return new Response([
             'newUserId' => $newUserId
-        ], SymfonyResponse::HTTP_CREATED);
+        ], SymfonyResponse::HTTP_CREATED, 'User registered successfully');
     }
 
     #[IsGranted(UserRole::ADMIN->value)]
@@ -114,7 +114,7 @@ class UserController extends AbstractFOSRestController
     )]
     public function getUsers(): Response
     {
-        return new Response($this->userFacade->getAll());
+        return new Response($this->userFacade->getAll(), message: 'List of users retrieved successfully');
     }
 
     #[IsGranted(UserRole::ADMIN->value)]
@@ -152,7 +152,7 @@ class UserController extends AbstractFOSRestController
     )]
     public function getOneUser(int $id): Response
     {
-        return new Response($this->userFacade->getOne($id));
+        return new Response($this->userFacade->getOne($id), message: 'User retrieved successfully');
     }
 
     #[IsGranted(UserRole::ADMIN->value)]
@@ -195,7 +195,7 @@ class UserController extends AbstractFOSRestController
 
         return new Response([
             'newUserId' => $newUserId
-        ], SymfonyResponse::HTTP_CREATED);
+        ], SymfonyResponse::HTTP_CREATED, 'User created successfully');
     }
 
     #[IsGranted(UserRole::ADMIN->value)]
@@ -235,7 +235,7 @@ class UserController extends AbstractFOSRestController
     {
         $this->userFacade->update($id, $request);
 
-        return new Response();
+        return new Response(message: 'User updated successfully');
     }
 
     #[IsGranted(UserRole::ADMIN->value)]
@@ -265,6 +265,6 @@ class UserController extends AbstractFOSRestController
     {
         $this->userFacade->delete($id);
 
-        return new Response();
+        return new Response(message: 'User deleted successfully');
     }
 }
