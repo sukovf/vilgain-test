@@ -91,11 +91,10 @@ class ArticleController extends AbstractFOSRestController
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
-                required: ['title', 'content', 'author_id'],
+                required: ['title', 'content'],
                 properties: [
                     'title'     => new OA\Property(property: 'title', type: 'string'),
-                    'content'   => new OA\Property(property: 'content', type: 'string'),
-                    'author_id' => new OA\Property(property: 'author_id', type: 'integer')
+                    'content'   => new OA\Property(property: 'content', type: 'string')
                 ]
             )
         ),

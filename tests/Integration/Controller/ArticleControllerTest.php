@@ -67,12 +67,11 @@ class ArticleControllerTest extends BaseWebTestCase
 
         $authorUser = $this->referenceRepository->getReference(UserGetFixture::USER_AUTHOR_REFERENCE, User::class);
 
-        $this->client->loginUser($this->createUser(UserRole::ADMIN));
+        $this->client->loginUser($authorUser);
 
         $this->makeJsonRequest('POST', '/api/articles', [
             'title'     => self::NEW_ARTICLE_TITLE,
-            'content'   => self::NEW_ARTICLE_CONTENT,
-            'author_id' => $authorUser->getId()
+            'content'   => self::NEW_ARTICLE_CONTENT
         ]);
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
 
