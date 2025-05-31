@@ -52,45 +52,33 @@ class CreateArticleFormTypeTest extends KernelTestCase
             'allProperties'     => [
                 'data'      => [
                     'title'     => 'Foo bar',
-                    'content'   => 'Blah blah blah...',
-                    'author_id' => 1
+                    'content'   => 'Blah blah blah...'
                 ],
                 'isValid'       => true
             ],
             'missingTitle'     => [
                 'data'      => [
-                    'content'   => 'Blah blah blah...',
-                    'author_id' => 1
+                    'content'   => 'Blah blah blah...'
                 ],
                 'isValid'       => false
             ],
             'emptyTitle'        => [
                 'data'      => [
                     'title'     => '',
-                    'content'   => 'Blah blah blah...',
-                    'author_id' => 1
+                    'content'   => 'Blah blah blah...'
                 ],
                 'isValid'       => false
             ],
             'missingContent'    => [
                 'data'      => [
-                    'title'     => 'Foo bar',
-                    'author_id' => 1
+                    'title'     => 'Foo bar'
                 ],
                 'isValid'       => false
             ],
             'emptyContent'      => [
                 'data'      => [
                     'title'     => 'Foo bar',
-                    'content'   => '',
-                    'author_id' => 1
-                ],
-                'isValid'       => false
-            ],
-            'missingAuthorId'   => [
-                'data'      => [
-                    'title'     => 'Foo bar',
-                    'content'   => 'Blah blah blah...',
+                    'content'   => ''
                 ],
                 'isValid'       => false
             ]
