@@ -3,10 +3,9 @@
 namespace App\Service\Article\Creator;
 
 use App\Entity\Article;
-use App\Repository\UserRepository;
+use App\Entity\User;
 use App\Security\Voter\ArticleVoter;
 use App\Service\Article\Exception\ForbiddenException;
-use App\Service\User\Exception\UserNotFoundException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +15,6 @@ class Creator
     public function __construct(
         private readonly Security               $security,
         private readonly FormHandler            $formHandler,
-        private readonly UserRepository         $userRepository,
         private readonly EntityManagerInterface $entityManager
     ) {}
 
@@ -26,17 +24,14 @@ class Creator
             throw new ForbiddenException('You are not allowed to create an article');
         }
 
-        $handlerOutput = $this->formHandler->handle($request);
+        $newArticle = $this->formHandler->handle($request);
 
-        $newArticle = $handlerOutput->getArticle();
+        /** @var User $user */
+        $user = $this->security->getUser();
 
-        if (!($authorUser = $this->userRepository->find($handlerOutput->getAuthorUserId()))) {
-            throw new UserNotFoundException('User not found');
-        }
+        $user->addArticle($newArticle);
 
-        $authorUser->addArticle($newArticle);
-
-        $this->entityManager->persist($authorUser);
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         return $newArticle->getId();
