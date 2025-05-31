@@ -3,7 +3,6 @@
 namespace App\Tests\Unit\Service\Article;
 
 use App\Entity\Article;
-use App\Entity\User;
 use App\Repository\ArticleRepository;
 use App\Security\Voter\ArticleVoter;
 use App\Service\Article\Deleter;
@@ -18,7 +17,6 @@ class DeleterTest extends TestCase
 {
     private const ARTICLE_ID = 10;
 
-    private User&MockObject $authorUserMock;
     private Article&MockObject $articleMock;
     private ArticleRepository&MockObject $articleRepositoryMock;
     private Security&MockObject $securityMock;
@@ -28,8 +26,6 @@ class DeleterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->authorUserMock = $this->createMock(User::class);
 
         $this->articleMock = $this->createMock(Article::class);
 
@@ -44,10 +40,6 @@ class DeleterTest extends TestCase
 
     public function testDelete(): void
     {
-        $this->authorUserMock->expects(self::once())->method('removeArticle');
-
-        $this->articleMock->expects(self::exactly(2))->method('getAuthor')->willReturn($this->authorUserMock);
-
         $this->securityMock
             ->expects(self::once())
             ->method('isGranted')
@@ -60,7 +52,7 @@ class DeleterTest extends TestCase
             ->with(self::ARTICLE_ID)
             ->willReturn($this->articleMock);
 
-        $this->entityManagerMock->expects(self::once())->method('remove')->with($this->authorUserMock);
+        $this->entityManagerMock->expects(self::once())->method('remove')->with($this->articleMock);
         $this->entityManagerMock->expects(self::once())->method('flush');
 
         $this->deleter->delete(self::ARTICLE_ID);
