@@ -1,0 +1,2 @@
+CREATE SCHEMA `dev`;
+CREATE SCHEMA `dev_test`;
