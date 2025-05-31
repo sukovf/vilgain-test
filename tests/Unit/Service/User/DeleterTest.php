@@ -5,7 +5,9 @@ namespace App\Tests\Unit\Service\User;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\User\Deleter;
+use App\Service\User\Exception\UserHasArticlesException;
 use App\Service\User\Exception\UserNotFoundException;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -30,7 +32,11 @@ class DeleterTest extends TestCase
 
     public function testDelete(): void
     {
+        $articleCollectionMock = $this->createMock(Collection::class);
+        $articleCollectionMock->method('count')->willReturn(0);
+
         $userMock = $this->createMock(User::class);
+        $userMock->method('getArticles')->willReturn($articleCollectionMock);
 
         $this->userRepositoryMock
             ->expects(self::once())
@@ -56,6 +62,28 @@ class DeleterTest extends TestCase
         $this->entityManagerMock->expects(self::never())->method('flush');
 
         $this->expectException(UserNotFoundException::class);
+
+        $this->deleter->delete(self::USER_ID);
+    }
+
+    public function testUserWithArticles(): void
+    {
+        $articleCollectionMock = $this->createMock(Collection::class);
+        $articleCollectionMock->method('count')->willReturn(1);
+
+        $userMock = $this->createMock(User::class);
+        $userMock->method('getArticles')->willReturn($articleCollectionMock);
+
+        $this->userRepositoryMock
+            ->expects(self::once())
+            ->method('find')
+            ->with(self::USER_ID)
+            ->willReturn($userMock);
+
+        $this->entityManagerMock->expects(self::never())->method('remove');
+        $this->entityManagerMock->expects(self::never())->method('flush');
+
+        $this->expectException(UserHasArticlesException::class);
 
         $this->deleter->delete(self::USER_ID);
     }
