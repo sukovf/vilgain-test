@@ -5,11 +5,14 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use App\Security\UserRole;
 use App\Type\UserRoleType;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Doctrine\ORM\Mapping\OneToMany;
 use JsonSerializable;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,6 +40,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
 
     #[Column('role', UserRoleType::NAME)]
     private UserRole $role;
+
+    /** @var Collection<int, Article> */
+    #[OneToMany(targetEntity: Article::class, mappedBy: 'author', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $articles;
+
+    public function __construct()
+    {
+        $this->articles = new ArrayCollection();
+    }
 
     public function getId(): int
     {
@@ -90,6 +102,40 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JsonSer
     public function setRole(UserRole $role): self
     {
         $this->role = $role;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Article>
+     */
+    public function getArticles(): Collection
+    {
+        return $this->articles;
+    }
+
+    /**
+     * @param Collection<int, Article> $articles
+     */
+    public function setArticles(Collection $articles): self
+    {
+        $this->articles = $articles;
+        return $this;
+    }
+
+    public function addArticle(Article $article): self
+    {
+        if (!$this->articles->contains($article)) {
+            $this->articles->add($article);
+            $article->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticle(Article $article): self
+    {
+        $this->articles->removeElement($article);
+
         return $this;
     }
 
