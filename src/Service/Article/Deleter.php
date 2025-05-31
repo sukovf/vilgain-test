@@ -27,9 +27,7 @@ class Deleter
             throw new ForbiddenException('You are not allowed to delete this article');
         }
 
-        $article->getAuthor()->removeArticle($article);
-
-        $this->entityManager->remove($article->getAuthor());
+        $this->entityManager->remove($article);
         $this->entityManager->flush();
     }
 }
